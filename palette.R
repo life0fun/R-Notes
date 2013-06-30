@@ -1,0 +1,64 @@
+# Uses k-means clustering to generate a palette of colors
+# from an image.
+#
+# Mohit Cheppudia 2011 <mohit@muthanna.com>
+#
+# Prerequisites:
+#   - Package 'ReadImages'
+#   - Package 'cclust'
+#
+# Quick run:
+#   source("~/path/to/this/palette.rscript")
+#
+#   plot_palette("/path/to/image") # Find 10 clusters (default)
+#   plot_palette("/path/to/image", 20) # Find 20 clusters
+#
+# Alternate run:
+#   image <- read.jpeg("/path/to/image")
+#   p = palette(image, 10, 20)
+#   plot(p)
+
+library(ReadImages)
+library(cclust)
+
+palette <- function(im, palette_size, iterations) {
+  # Convert the image into a list of observations, each observation
+  # is a 3-dimensional vector of RGB. For cclust we represent this
+  # as 2x3 matrix where each row is an observation and each column
+  # is a feature (R,G,B).
+  observations <- matrix(im, ncol=3)
+
+  # Run k-means clustering, ask for 'palette_size' clusters, run
+  # at most 100 iterations until convergence. This call requires the
+  # 'cclust' package to be installed.
+  k <- cclust(observations, palette_size, iter.max=iterations)
+
+  # We now have the clusters -- merge the clusters back into a matrix
+  # to display the final image. k$cluster is a list of cluster numbers,
+  # one for each observation.
+  #
+  # i.e., k$cluster[1] holds the cluster number for observation 1.
+  final_matrix <- NULL
+  for (i in order(k$size)) {
+    cluster <- observations[k$cluster == i,]
+    final_matrix <- rbind(final_matrix, cluster)
+  }
+
+  # Create the final image (with the dimensions of the original image
+  # and return.
+  dims = dim(im)
+  final_im = imagematrix(final_matrix, "rgb", dims[1], dims[2])
+  final_im
+}
+
+# Display image and palette next to each other
+plot_palette <- function(image, palette_size=10, iterations=20) {
+  im <- read.jpeg(image)
+  fm <- palette(im, palette_size, iterations)
+
+  layout(matrix(c(1, 2, 1, 2), 2, byrow=T))
+  plot(im)
+  plot(fm)
+
+  title(sprintf("Clusters: %d", palette_size))
+}
