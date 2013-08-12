@@ -58,6 +58,8 @@
   Center Limit Theorem(CLT) : random variables tends to follow normal distribution.
   Test and hypothesis: statistic take n random samples of population, as n samples approximately normal dist, from n samples sigma, SE, etc, we can estimate population.
 
+  https://www.khanacademy.org/math/probability/statistics-inferential/hypothesis-testing/v/z-statistics-vs--t-statistics
+
   If the observed value is normally distributed, then under the null hypothesis, the z-statistic has a standard normal distribution
   So the further the z-statistic is from zero, such extreme z-statitics should unlikely to happen under normal distribution. this serves as the stronger the evidence that the null hypothesis is false.
   The P-value of the test is the chance of getting a test statistic as extreme, or more extreme, than the one we observed(z-value), if the null hypothesis is true
@@ -66,6 +68,19 @@
   68% population within mean+- 1 sd, confidence level 68%
   95% population within mean+- 2 sd, confidence level 95%.
   SE = 2*sigma.
+
+  CLT say we probably can infer population from sample. Probability is Confidence level.
+
+  so we draw the sample, got x-bar, sample mean,  s, sample standard deviation.
+  Population u and sigma can be inferred thru z-test(sample size > 30) or t-test.
+
+    Z = (x-bar - u) / sample-stdv / sqrt(n)
+
+    z is in (−1, 1) with probability approximately 0.68
+    z is in (−2, 2) with probability approximately 0.95
+
+  so, if you relax z to 2, you higly probably(95%) guessed u value by assert it must be within a range. however the range could be coarse.
+
 
   Ex: U.S ppl life mean 68, sd(sigma) is 5. so 95% ppl live from 58-78.
 
@@ -122,6 +137,9 @@
     A P-value of less than 5% is statistically significant: the difference can't be explained by chance, so reject the null hypothesis
     A P-value of more than 5% is not statistically significant: the difference can be explained by chance. We don't have enough evidence to reject the null hypothesis.
 
+  Comparing p-values from t and z 
+    One may be tempted to think that the confidence interval based on the t statistic would always be larger than that based on the z statistic as always t∗ > z∗ . However, the standard error SE for the t also depends on s which is variable and can sometimes be small enough to offset the difference.
+
 ## Confidence Level : how close sample to population. z=diff(sample,population) is to 0 by confidence. Prob(-1<(p-xp)/SE<1)=0.68 
     Claim: 42 likes out of 100 surveyed with error 9%. This is 95% CI.
     1. sample mean approximate to true mean, with sample size n, population std sigma, and CI.
@@ -135,6 +153,7 @@
     yes-belt = c(12813,647,359,42)
     no-belt = c(65963,4000,2642,303)
     chisq.test(data.frame(yes-belt,no-belt))
+
 
 ## ANOVA 
 F-dist: distribution between two variances, the ratio of two chi-square variables. ANOVA.
